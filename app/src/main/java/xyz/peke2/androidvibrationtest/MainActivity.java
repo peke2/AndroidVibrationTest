@@ -21,6 +21,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcel;
@@ -50,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        identifyDevice();
+
         Button buttonStart = findViewById(R.id.button_vib_start);
         buttonStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,14 +74,20 @@ public class MainActivity extends AppCompatActivity {
 
                 VibrationEffect effect = VibrationEffect.createWaveform(timings, amplitudes,-1);
 
-                vib.cancel();
-
                 long st, elapsed;
-                st = System.currentTimeMillis();
-                vib.vibrate(effect);
-                elapsed = System.currentTimeMillis() - st;
 
-                Log.d("vibration_test", "elapsed:"+ String.valueOf(elapsed)+"ms");
+                st = System.currentTimeMillis();
+
+                //vib.cancel();
+
+                elapsed = System.currentTimeMillis() - st;
+                Log.d("vibration_test", "cancel elapsed:"+ String.valueOf(elapsed)+"ms");
+                st = System.currentTimeMillis();
+
+                vib.vibrate(effect);
+
+                elapsed = System.currentTimeMillis() - st;
+                Log.d("vibration_test", "vibrate elapsed:"+ String.valueOf(elapsed)+"ms");
             }
         });
 
@@ -91,5 +100,10 @@ public class MainActivity extends AppCompatActivity {
                 vib.cancel();
             }
         });
+    }
+
+    void identifyDevice()
+    {
+        Log.d("vibration_test", "MANUFACTURER["+Build.MANUFACTURER + "] MODEL["+Build.MODEL+"]");
     }
 }
