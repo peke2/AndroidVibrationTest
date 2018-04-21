@@ -46,10 +46,14 @@ import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
 
+    VibrationThread vibThread;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        vibThread = new VibrationThread(getApplicationContext());
 
         identifyDevice();
 
@@ -64,30 +68,39 @@ public class MainActivity extends AppCompatActivity {
                 long[] timings = new long[]{100,100,100,100,100,100,100,100,100,100};
                 int[] amplitudes = new int[]{250,10,180,200,0,120,180,30,30,200};
 
-                //long[] timings = new long[]{10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,};
-                //int[] amplitudes = new int[]{7,22,4,52,17,5,59,45,51,7,1,24,50,53,16,36,27,55,44,14,12,59,6,56,6,51,2,13,4,42,19,54,48,42,28,54,4,18,16,22,20,17,25,37,16,1,32,0,3,16,12,2,5,8,0,30,0,14,13,28,4,3,22,0,7,8,9,1,2,6,13,1,0,1,5,2,2,5,5,3,1,2,2,0,2,4,0,1,1,0,0,1,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,};
-                /*
-                for(int i=0; i<amplitudes.length; i++)
+                if( false ) {
+                    VibrationEffect effect = VibrationEffect.createWaveform(timings, amplitudes, -1);
+
+                    long st, elapsed;
+
+                    st = System.currentTimeMillis();
+
+                    //vib.cancel();
+
+                    elapsed = System.currentTimeMillis() - st;
+                    Log.d("vibration_test", "cancel elapsed:" + String.valueOf(elapsed) + "ms");
+                    st = System.currentTimeMillis();
+
+                    vib.vibrate(effect);
+
+                    elapsed = System.currentTimeMillis() - st;
+                    Log.d("vibration_test", "vibrate elapsed:" + String.valueOf(elapsed) + "ms");
+                }
+                else
                 {
-                    amplitudes[i] *= 4;
-                }*/
+                    long st, elapsed;
 
-                VibrationEffect effect = VibrationEffect.createWaveform(timings, amplitudes,-1);
+                    st = System.currentTimeMillis();
 
-                long st, elapsed;
+                    elapsed = System.currentTimeMillis() - st;
+                    Log.d("vibration_test", "cancel elapsed:" + String.valueOf(elapsed) + "ms");
+                    st = System.currentTimeMillis();
 
-                st = System.currentTimeMillis();
+                    vibThread.add(timings, amplitudes);
 
-                //vib.cancel();
-
-                elapsed = System.currentTimeMillis() - st;
-                Log.d("vibration_test", "cancel elapsed:"+ String.valueOf(elapsed)+"ms");
-                st = System.currentTimeMillis();
-
-                vib.vibrate(effect);
-
-                elapsed = System.currentTimeMillis() - st;
-                Log.d("vibration_test", "vibrate elapsed:"+ String.valueOf(elapsed)+"ms");
+                    elapsed = System.currentTimeMillis() - st;
+                    Log.d("vibration_test", "vibrate elapsed:" + String.valueOf(elapsed) + "ms");
+                }
             }
         });
 
